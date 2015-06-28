@@ -78,32 +78,17 @@
 				return (
 					<div>
 						<div className="col-xs-6">
-							<div className="panel panel-default">
-								<div className="panel-heading">
-									<h3 className="panel-title">Super Hero Form</h3>
+							<form onSubmit={this.handleSubmit}>
+								<div className="input-group">
+									<span className="input-group-addon" id="basic-addon1">First Name</span>
+									<input type="text" value={this.state.first} onChange={this.onChangeFirst} className="form-control" placeholder="First Name" aria-describedby="basic-addon1" />
 								</div>
-								<div className="panel-body">
-									<form onSubmit={this.handleSubmit}>
-										<div className="row">
-											<div className="col-sm-4 col-xs-4">
-												First Name
-											</div>
-											<div>
-												<input type="text" value={this.state.first} onChange={this.onChangeFirst} />
-											</div>
-										</div>
-										<div className="row">
-											<div className="col-sm-4 col-xs-4">
-												Last Name
-											</div>
-											<div>
-												<input type="text" value={this.state.last} onChange={this.onChangeLast} />
-											</div>
-										</div>
-										<button>Add</button>
-									</form>
+								<div className="input-group">
+									<span className="input-group-addon" id="basic-addon2">Last Name</span>
+									<input type="text" value={this.state.last} onChange={this.onChangeLast} className="form-control" placeholder="Last Name" aria-describedby="basic-addon2" />
 								</div>
-							</div>
+								<button>Add</button>
+							</form>
 						</div>
 						<PersonList data={this.state.data} />
 					</div>
