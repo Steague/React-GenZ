@@ -13,6 +13,7 @@
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	</head>
 	<body>
+		<!--
 		<nav class="navbar navbar-inverse">
 			<div class="container">
 				<div class="navbar-header">
@@ -45,6 +46,7 @@
 				</div>
 			</div>
 		</nav>
+		-->
 		<div id="content"></div>
 		<div id="todo" class="col-xs-12">
 			<h2>TODO:</h2>
@@ -54,6 +56,54 @@
 		</div>
 		<script type="text/jsx">
 		/*** @jsx React.DOM */
+
+		var GZApp = React.createClass({
+			getInitialState:function()
+			{
+				return {
+					data:[],
+					loggedIn:null
+				};
+			},
+			render: function()
+			{
+				var loggedIn;
+
+				if (this.state.loggedIn === null)
+				{
+					loggedIn =  (<Login />);
+				}
+
+				return (
+					<div>
+						{loggedIn}
+					</div>
+				);
+			}
+		});
+
+		var Login = React.createClass({
+			render: function()
+			{
+				return (
+					<div>
+						<form className="form-signin">
+							<h2 className="form-signin-heading">Please sign in</h2>
+							<label htmlFor="inputEmail" className="sr-only">Email address</label>
+							<input type="email" id="inputEmail" className="form-control" placeholder="Email address" required autofocus />
+							<label htmlFor="inputPassword" className="sr-only">Password</label>
+							<input type="password" id="inputPassword" className="form-control" placeholder="Password" required />
+							<div className="checkbox">
+								<label>
+									<input type="checkbox" value="remember-me" /> Remember me
+								</label>
+							</div>
+							<button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+						</form>
+					</div>
+				);
+			}
+		});
 
 		var PersonApp = React.createClass({
 			getInitialState:function(){
@@ -128,7 +178,7 @@
 			}
 		});
 
-		React.renderComponent(<PersonApp />, document.getElementById('content'));
+		React.renderComponent(<GZApp />, document.getElementById('content'));
 		</script>
 	</body>
 </html>
