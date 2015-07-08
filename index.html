@@ -82,65 +82,110 @@
 			}
 		});
 
+		var Auth = {
+			login: function(username, password) {
+				console.log("LOGGING IN AS: ", username);
+				return this;
+			},
+			catch: function(fn) {
+				fn;
+			}
+		};
+
 		var Login = React.createClass({
+			getInitialState:function(){
+				return {
+					data:[],
+					username:'',
+					password:''
+				}
+			},
+			onChangeUsername:function(e){
+				this.setState({username:e.target.value})
+			},
+			onChangePassword:function(e){
+				this.setState({password:e.target.value})
+			},
+			handleLogin:function(e){
+				e.preventDefault();
+				this.state.data.push({username:this.state.username, password:this.state.password});
+				this.setState({username:'',password:''});
+				// Here, we call an external AuthService. We’ll create it in the next step
+				Auth.login(this.state.username, this.state.password)
+				.catch(function(err) {
+					console.log("Error logging in", err);
+				});
+			},
+			onClickSignup: function(e){
+				e.preventDefault();
+				React.renderComponent(<Signup />, document.getElementById('content'));
+			},
+
 			render: function()
 			{
 				return (
 					<div>
-						<form className="form-signin">
+						<form className="form-signin" onSubmit={this.handleLogin}>
 							<h2 className="form-signin-heading">Please sign in</h2>
-							<label htmlFor="inputEmail" className="sr-only">Email address</label>
-							<input type="email" id="inputEmail" className="form-control" placeholder="Email address" required autofocus />
+							<label htmlFor="inputUser" className="sr-only">Username</label>
+							<input type="text" id="inputUser" className="form-control" placeholder="Username" value={this.state.username} onChange={this.onChangeUsername} required autoFocus />
 							<label htmlFor="inputPassword" className="sr-only">Password</label>
-							<input type="password" id="inputPassword" className="form-control" placeholder="Password" required />
+							<input type="password" id="inputPassword" className="form-control" placeholder="Password" value={this.state.password} onChange={this.onChangePassword} required />
 							<div className="checkbox">
 								<label>
 									<input type="checkbox" value="remember-me" /> Remember me
 								</label>
 							</div>
 							<button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+							<button className="btn btn-lg btn-primary btn-block" type="button" onClick={this.onClickSignup}>Sign up</button>
 						</form>
 					</div>
 				);
 			}
 		});
 
-		var PersonApp = React.createClass({
+		var Signup = React.createClass({
 			getInitialState:function(){
 				return {
 					data:[],
-					first:'',
-					last:''
+					username:'',
+					password:'',
+					passwordAgain:''
 				}
 			},
-			onChangeFirst:function(e){
-				this.setState({first:e.target.value})
+			onChangeUsername:function(e){
+				this.setState({username:e.target.value})
 			},
-			onChangeLast:function(e){
-				this.setState({last:e.target.value})
+			onChangePassword:function(e){
+				this.setState({password:e.target.value})
 			},
-			handleSubmit:function(e){
+			onChangePasswordAgain:function(e){
+				this.setState({passwordAgain:e.target.value})
+			},
+			handleSignup:function(e){
 				e.preventDefault();
-				this.state.data.push({first:this.state.first, last:this.state.last});
-				this.setState({first:'',last:''});
+				this.state.data.push({username:this.state.username, password:this.state.password, passwordAgain:this.state.passwordAgain});
+				console.log(this.state.data);
+				this.setState({username:'', password:'', passwordAgain:''});
+				// Here, we call an external AuthService. We’ll create it in the next step
+				// Auth.login(this.state.username, this.state.password)
+				// .catch(function(err) {
+				// 	console.log("Error logging in", err);
+				// });
 			},
-			render: function(){
+			render:function(){
 				return (
 					<div>
-						<div className="col-xs-6">
-							<form onSubmit={this.handleSubmit}>
-								<div className="input-group">
-									<span className="input-group-addon" id="basic-addon1">First Name</span>
-									<input type="text" value={this.state.first} onChange={this.onChangeFirst} className="form-control" placeholder="First Name" aria-describedby="basic-addon1" />
-								</div>
-								<div className="input-group">
-									<span className="input-group-addon" id="basic-addon2">Last Name</span>
-									<input type="text" value={this.state.last} onChange={this.onChangeLast} className="form-control" placeholder="Last Name" aria-describedby="basic-addon2" />
-								</div>
-								<button>Add</button>
-							</form>
-						</div>
-						<PersonList data={this.state.data} />
+						<form className="form-signup" onSubmit={this.handleSignup}>
+							<h2 className="form-signup-heading">Sign up</h2>
+							<label htmlFor="inputUser" className="sr-only">Username</label>
+							<input type="text" id="inputUser" className="form-control" placeholder="Username" value={this.state.username} onChange={this.onChangeUsername} required autoFocus />
+							<label htmlFor="inputPassword" className="sr-only">Password</label>
+							<input type="password" id="inputPassword" className="form-control" placeholder="Password" value={this.state.password} onChange={this.onChangePassword} required />
+							<label htmlFor="inputPasswordAgain" className="sr-only">Password again</label>
+							<input type="password" id="inputPasswordAgain" className="form-control" placeholder="Password" value={this.state.passwordAgain} onChange={this.onChangePasswordAgain} required />
+							<button className="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+						</form>
 					</div>
 				)
 			}
