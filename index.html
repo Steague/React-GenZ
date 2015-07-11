@@ -5,12 +5,13 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
 	    <title>Generation Z</title>
-		<script type="text/javascript" src="js/react-0.8.0.js"></script>
-		<script type="text/javascript" src="js/JSXTransformer-0.8.0.js"></script>
-		<script type="text/javascript" src="js/jquery.min.js"></script>
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/bootstrap-theme.min.css">
-		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="assets/js/react-0.8.0.js"></script>
+		<script type="text/javascript" src="assets/js/JSXTransformer-0.8.0.js"></script>
+		<script type="text/javascript" src="assets/js/jquery.min.js"></script>
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="assets/css/bootstrap-theme.min.css">
+		<link rel="stylesheet" href="assets/css/main.css">
+		<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
 	</head>
 	<body>
 		<!--
@@ -150,23 +151,29 @@
 					data:[],
 					username:'',
 					password:'',
-					passwordAgain:''
-				}
+					confirmPassword:'',
+					passMatch: 'glyphicon glyphicon-remove'
+				};
 			},
 			onChangeUsername:function(e){
-				this.setState({username:e.target.value})
+				this.setState({username:e.target.value});
 			},
 			onChangePassword:function(e){
-				this.setState({password:e.target.value})
+				this.setState({password:e.target.value}, this.checkPassMatch);
 			},
-			onChangePasswordAgain:function(e){
-				this.setState({passwordAgain:e.target.value})
+			onChangeConfirmPassword:function(e){
+				this.setState({confirmPassword:e.target.value}, this.checkPassMatch);
+			},
+			checkPassMatch: function(){
+				this.setState({
+					passMatch: (this.state.password === this.state.confirmPassword ? "glyphicon glyphicon-ok" : "glyphicon glyphicon-remove")
+				});
 			},
 			handleSignup:function(e){
 				e.preventDefault();
-				this.state.data.push({username:this.state.username, password:this.state.password, passwordAgain:this.state.passwordAgain});
+				this.state.data.push({username:this.state.username, password:this.state.password, confirmPassword:this.state.confirmPassword});
 				console.log(this.state.data);
-				this.setState({username:'', password:'', passwordAgain:''});
+				this.setState({username:'', password:'', confirmPassword:''});
 				// Here, we call an external AuthService. We’ll create it in the next step
 				// Auth.login(this.state.username, this.state.password)
 				// .catch(function(err) {
@@ -181,43 +188,17 @@
 							<label htmlFor="inputUser" className="sr-only">Username</label>
 							<input type="text" id="inputUser" className="form-control" placeholder="Username" value={this.state.username} onChange={this.onChangeUsername} required autoFocus />
 							<label htmlFor="inputPassword" className="sr-only">Password</label>
-							<input type="password" id="inputPassword" className="form-control" placeholder="Password" value={this.state.password} onChange={this.onChangePassword} required />
-							<label htmlFor="inputPasswordAgain" className="sr-only">Password again</label>
-							<input type="password" id="inputPasswordAgain" className="form-control" placeholder="Password" value={this.state.passwordAgain} onChange={this.onChangePasswordAgain} required />
+							<div className="inner-addon right-addon">
+							    <i className={this.state.passMatch}></i>
+							    <input type="password" id="inputPassword" className="form-control" placeholder="Password" value={this.state.password} onChange={this.onChangePassword} required />
+							</div>
+							<label htmlFor="inputConfirmPassword" className="sr-only">Password again</label>
+							<div className="inner-addon right-addon">
+							    <i className={this.state.passMatch}></i>
+							    <input type="password" id="inputConfirmPassword" className="form-control" placeholder="Confirm Password" value={this.state.confirmPassword} onChange={this.onChangeConfirmPassword} required />
+							</div>
 							<button className="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
 						</form>
-					</div>
-				)
-			}
-		});
-
-		var Person = React.createClass({
-			render:function(){
-				return (
-					<div>
-						<div className="col-sm-4">
-							<div className="panel panel-default">
-								<div className="panel-heading">
-									<h3 className="panel-title">Super Hero</h3>
-								</div>
-								<div className="panel-body">
-									{this.props.last}, {this.props.first}
-								</div>
-							</div>
-						</div>
-					</div>
-				)
-			}
-		});
-
-		var PersonList = React.createClass({
-			render:function(){
-				var people = this.props.data.map(function(person){
-					return <Person first={person.first} last={person.last} />
-				});
-				return (
-					<div>
-						{people}
 					</div>
 				)
 			}
